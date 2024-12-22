@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8" />
+<title>Testing WASM</title>
+
+</head>
+
+<body>
+
+<script type="module">
+
+(async() => {
+    const response = await fetch('test.wasm');
+    const bytes = await response.arrayBuffer();
+    const { instance } = await WebAssembly.instantiate(bytes);
+
+    console.log('The first 50 fibbonacci numbers:');
+    let p = document.createElement("p");
+    p.append('The first 50 fibonacci numbers:');
+    document.body.append(p);
+
+    let br = document.createElement("br");
+    document.body.append(br);
+
+    p = document.createElement("p");
+    for (let idx = 0; idx < 50; ++idx) {
+        const f_number = instance.exports.fibonacci(idx);
+        console.log(f_number);
+        p.append(f_number + " ");
+    }
+    document.body.append(p);
+})();
+
+</script>
+
+</body>
+</html>
